@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shell Admin</title>
+  <link rel="icon" href="../assets/images/logoshell.png">
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
+  <!-- IonIcons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="/dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+  <!-- Navbar dan Sidebar tetap sama -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper bg-white">
+    <!-- Main content -->
+    <div class="container-sm mt-3 ">
+      <h3 class="mb-3"><i class="fas fa-table-list mr-2 mb-3"></i> Edit Detail Transaksi</h3>
+      <form id="transaksiform">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputNoTransaksi">No Transaksi</label>
+            <input type="text" class="form-control" id="inputTransaksi" readonly>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputKode">Kode Barang</label>
+            <select id="inputKode" class="form-control">
+              <option selected>Pilih..</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputBarang">Nama Barang</label>
+            <input type="text" class="form-control" id="inputBarang" readonly>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputQty">Qty</label>
+            <input type="number" class="form-control" id="inputQty">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputHarga">Harga</label>
+            <input type="number" class="form-control" id="inputHarga">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputTotal">Total</label>
+            <input type="text" class="form-control" id="inputTotal" readonly>
+          </div>
+        </div>
+        
+        <button type="submit" class="btn btn-warning" style="color: #ffffff;">Update</button>
+        <a href="detailtransaksilihat.html" class="btn btn-danger">Kembali</a>
+      </form>
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+</div>
+<!-- Scripts tetap sama seperti sebelumnya -->
+<script>
+  // Ambil daftar dari local storage atau inisialisasi sebagai array kosong
+  const barangList = JSON.parse(localStorage.getItem('barangList')) || [];
+  const kategoriList = JSON.parse(localStorage.getItem('kategoriList')) || [];
+  const detailTransaksiList = JSON.parse(localStorage.getItem('detailTransaksiList')) || [];
+  
+  // Dapatkan nomor transaksi dan ID detail transaksi dari parameter URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const noTransaksi = urlParams.get('no');
+  const detailId = urlParams.get('id');
+  
+  // Tampilkan nomor transaksi di form
+  document.getElementById('inputTransaksi').value = noTransaksi;
+  
+  // Isi combobox dengan kode barang
+  const kodeBarangSelect = document.getElementById('inputKode');
+  barangList.forEach((barang) => {
+    const kategori = kategoriList.find((kat) => kat.no == barang.kategori);
+    if (kategori) {
+      const kode = kategori.kodeBarang + '-' + barang.no;
+      const option = document.createElement('option');
+      option.value = barang.no;
+      option.text = kode;
+      kodeBarangSelect.appendChild(option);
+    }
+  });
+  
+  // Temukan detail transaksi yang cocok dengan ID
+  const detailTransaksi = detailTransaksiList.find((dt) => dt.id == detailId);
+  
+  // Isi form dengan data dari detail transaksi
+  if (detailTransaksi) {
+    kodeBarangSelect.value = detailTransaksi.kodeBarang;
+    document.getElementById('inputBarang').value = detailTransaksi.namaBarang;
+    document.getElementById('inputQty').value = detailTransaksi.qty;
+    document.getElementById('inputHarga').value = detailTransaksi.harga;
+    document.getElementById('inputTotal').value = detailTransaksi.total.toFixed(2);
+  }
+  
+  // Fungsi untuk menghitung total
+  function hitungTotal() {
+    const qty = parseInt(document.getElementById('inputQty').value) || 0;
+    const harga = parseFloat(document.getElementById('inputHarga').value) || 0;
+    const total = qty * harga;
+    document.getElementById('inputTotal').value = total.toFixed(2);
+  }
+  
+  // Tambahkan event listener untuk perubahan di combobox
+  kodeBarangSelect.addEventListener('change', (e) => {
+    const selectedKode = e.target.value;
+    const selectedBarang = barangList.find(barang => barang.no === selectedKode);
+    if (selectedBarang) {
+      document.getElementById('inputBarang').value = selectedBarang.nama;
+      document.getElementById('inputHarga').value = selectedBarang.harga;
+      document.getElementById('inputQty').value = ''; // Kosongkan field qty
+      hitungTotal();
+    }
+  });
+  
+  // Tambahkan event listeners untuk perubahan di qty dan harga
+  document.getElementById('inputQty').addEventListener('input', hitungTotal);
+  document.getElementById('inputHarga').addEventListener('input', hitungTotal);
+  
+  // Dapatkan elemen form
+  const form = document.getElementById('transaksiform');
+  
+  // Tambahkan event listener untuk pengiriman form
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+  
+    // Dapatkan nilai input
+    const kodeBarang = kodeBarangSelect.value;
+    const namaBarang = document.getElementById('inputBarang').value;
+    const qty = parseInt(document.getElementById('inputQty').value) || 0; // Pastikan qty adalah angka
+    const harga = parseFloat(document.getElementById('inputHarga').value) || 0; // Pastikan harga adalah angka
+    const total = qty * harga; // Hitung total berdasarkan qty dan harga
+  
+    // Temukan detail transaksi dan perbarui nilai yang diperlukan
+    const index = detailTransaksiList.findIndex((dt) => dt.id == detailId);
+    if (index >= 0) {
+      detailTransaksiList[index].kodeBarang = kodeBarang;
+      detailTransaksiList[index].namaBarang = namaBarang;
+      detailTransaksiList[index].qty = qty;
+      detailTransaksiList[index].harga = harga;
+      detailTransaksiList[index].total = total; // Perbarui total di sini
+    }
+  
+    // Perbarui detailTransaksiList di local storage
+    localStorage.setItem('detailTransaksiList', JSON.stringify(detailTransaksiList));
+  
+    // Alihkan ke halaman detailtransaksilihat
+    window.location.href = './detailtransaksilihat.html?no=' + noTransaksi;
+  });
+</script>
+
+</body>
+
+</html>

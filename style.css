@@ -1,0 +1,201 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.navbar {
+    background-color: #fff;
+    padding: 20px;
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.navbar-logo {
+    width: 50px;
+    height: auto;
+    margin-top: 10px;
+    margin-left: -80px;
+}
+
+.menu a {
+    color: #000;
+    margin-left: 20px;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+/* Slider Container */
+.slider {
+    position: relative;
+    max-width: 95%;
+    margin: auto;
+    overflow: hidden;
+    border-radius: 15px; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+/* Slide container */       
+.slide-container {
+    display: flex;
+    transition: transform 0.5s ease-in-out; /* Smooth transition */
+    width: 100%; /* Full width to prevent overflow */
+}
+
+.slide {
+    min-width: 100%; /* Each slide takes up full width */
+    transition: opacity 1s ease-in-out; /* Smooth fade */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slide img {
+    width: 100%;
+    border-radius: 15px; /* Rounded image corners */
+}
+
+/* Custom navigation buttons */
+.prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    padding: 16px;
+    margin-top: -22px;
+    background-color: rgba(0, 0, 0, 0.5); /* Transparent background */
+    color: #fff;
+    font-size: 18px;
+    border: none;
+    border-radius: 50%; /* Circular buttons */
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    transition: background-color 0.3s ease;
+}
+
+.next {
+    right: 10px;
+}
+
+.prev {
+    left: 10px;
+}
+
+.prev:hover, .next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+
+.dots {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.dots span {
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+    margin: 0 5px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+}
+
+.dots span.active {
+    background-color: #717171;
+}
+
+.dots span:hover {
+    background-color: #555;
+}
+
+.info-box {
+    width: 100%;
+    max-width: 1460px;
+    margin: 0 auto;
+    margin-top: 20px;
+    background-color: #fbce07;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+    position: relative;
+    height: auto; 
+}
+
+.bottom-box{
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    margin-top: 20px;
+    background-color: #fbce07;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+    position: relative;
+    height: auto; 
+}
+
+.info-box img {
+    max-width: 360px; 
+    width: 1100px;
+    height: auto;
+    margin-right: 30px; 
+    margin-left: 29px;
+    display: inline-block;
+    transition: transform 0.3s ease; 
+    
+}
+
+.info-box p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 22px;
+    color: #333;
+    margin: 0;
+    display: inline-block;
+}
+
+.info-box a:hover img {
+    transform: scale(1.05);
+}
+
+.logo_img{
+    margin-left: 70px;
+    margin-bottom: 20px;
+}
+    
+
+.bglogin{
+    background-image: url(gambar/bgshellkuning.png);
+    height: 100vh; 
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-body:hover {
+    color: red;
+  }

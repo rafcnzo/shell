@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/cetak.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Shell Cetak</title>
+</head>
+<body>
+    <div class="button-container">
+        <a href="./orders.html" class="btn btn-secondary" style="margin-bottom: 30px; padding-right: 420px;">
+            <i class="fas fa-arrow-left" style="font-size: 20px;"></i>
+        </a>
+    </div>
+    <div class="receipt-container" style="text-align: center;">
+        <a>
+            <img src="../gambar/logoshell.png" alt="Logo" class="navbar-logo" style="display: block; margin: 0 auto;">
+        </a>
+    
+        <div class="header">
+            <h3>Order ID # <span class="order-id"></span></h3>
+            <p class="order-date"></p>
+        </div>
+        
+        <div class="items">
+            <h4>Total items: <span class="total-items"></span></h4>
+            <!-- Item details will be inserted here by JavaScript -->
+        </div>
+        
+        <div class="cart-summary">
+            <div class="price-summary">
+                <!-- Price summary will be inserted here by JavaScript -->
+            </div>
+        </div>
+        <hr style="margin: 20px 0;">
+        <footer style="text-align: center; font-weight: bold; margin-top: 20px;">
+            <p>Terima kasih atas pesanan Anda!</p>
+        </footer>
+    </div>
+
+    <div class="button-container" style="text-align: center;">
+        <button class="btn btn-primary print-button" onclick="window.print()" style="margin-left: 50px;">
+            <i class="fas fa-print"></i>
+        </button>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Ambil noTransaksi dari URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const noTransaksi = urlParams.get('no');
+
+        // Ambil data transaksi dan detail transaksi dari localStorage
+        const transaksiList = JSON.parse(localStorage.getItem('transaksiList')) || [];
+        const detailTransaksiList = JSON.parse(localStorage.getItem('detailTransaksiList')) || [];
+
+        // Cari transaksi yang sesuai
+        const transaksi = transaksiList.find(t => t.noTransaksi === noTransaksi);
+        const detailTransaksi = detailTransaksiList.filter(d => d.noTransaksi === noTransaksi);
+
+        if (transaksi && detailTransaksi.length > 0) {
+            // Update informasi transaksi
+            document.querySelector('.order-id').textContent = transaksi.noTransaksi;
+            document.querySelector('.order-date').textContent = new Date(transaksi.tanggal).toLocaleString();
+
+            // Update jumlah item dengan batas kanan
+            const totalItemsContainer = document.querySelector('.total-items');
+            totalItemsContainer.textContent = detailTransaksi.length;
+            totalItemsContainer.style.display = 'inline-block';
+            totalItemsContainer.style.maxWidth = '100%'; // Atur batas kanan
+            totalItemsContainer.style.overflowWrap = 'break-word'; // Memungkinkan teks untuk melanjutkan ke baris berikutnya
+
+            // Tambahkan detail item
+            const itemsContainer = document.querySelector('.items');
+            let subtotal = 0;
+            detailTransaksi.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'item';
+                itemDiv.innerHTML = `<span>${item.namaBarang} - ${formatRupiah(item.harga)} x ${item.qty}</span>`;
+                itemsContainer.appendChild(itemDiv);
+                subtotal += item.total;
+            });
+
+            // Update ringkasan harga
+            const priceSummary = document.querySelector('.price-summary');
+            priceSummary.innerHTML = `
+                <p style="text-align: left;">Price: <span class="price">${formatRupiah(subtotal)}</span></p>
+                <p style="text-align: left;">Sub Total: ${formatRupiah(subtotal)}</p>
+                <p style="text-align: left;">Discount: ${formatRupiah(0)}</p>
+                <p style="text-align: left;">Total: ${formatRupiah(subtotal)}</p>
+                <p style="text-align: left;">Metode Pembayaran: ${transaksi.metodePembayaran}</p>
+            `;
+        } else {
+            alert('Transaksi tidak ditemukan');
+        }
+    });
+
+    function formatRupiah(angka) {
+        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(angka);
+    }
+    </script>
+</body>
+</html>
