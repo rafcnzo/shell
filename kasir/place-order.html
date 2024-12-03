@@ -174,7 +174,7 @@
                             <div class="card-body">
                                 <h5 class="card-title" style="font-weight: bold; margin-bottom: 10px;">${product.nama}</h5>
                                 <p class="card-text">${formatIDR(product.harga)}</p>
-                                ${product.kategori === '2' ? '<input type="number" class="form-control mt-2" placeholder="Masukkan jumlah harga" oninput="calculateLiter(this.value, \'' + product.no + '\')">' : ''}
+                                ${product.kategori === '1' ? '<input type="number" class="form-control mt-2" placeholder="Masukkan jumlah harga" oninput="calculateLiter(this.value, \'' + product.no + '\')">' : ''}
                             </div>
                         </div>
                     `;
@@ -222,7 +222,7 @@
                     const orderItem = document.createElement('div');
                     orderItem.classList.add('order-item', 'd-flex', 'justify-content-between', 'mb-2');
                     orderItem.innerHTML = `
-                        <p>${item.nama} - ${formatIDR(item.harga)} x ${item.kategori === '2' ? item.qty.toFixed(2) + ' liter' : item.qty + ' pcs'}</p>
+                        <p>${item.nama} - ${formatIDR(item.harga)} x ${item.kategori === '1' ? item.qty.toFixed(2) + ' liter' : item.qty + ' pcs'}</p>
                         <button class="btn btn-danger btn-sm" onclick="removeItemFromCart(${index})">Remove</button>
                     `;
                     orderList.appendChild(orderItem);
